@@ -5,9 +5,15 @@ __pycache__/
 *.pyd
 *.so
 
+# Environment variables - NEVER COMMIT!
+.env
+.env.local
+.env.*
+!.env.example
+
 # Virtual Environment
 venv/
-.env/
+env/
 
 # Flask
 instance/
