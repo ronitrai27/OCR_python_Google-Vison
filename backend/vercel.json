@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "name": "agristack-ocr-backend",
+  "builds": [
+    {
+      "src": "backend/app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "backend/app.py"
+    }
+  ],
+  "env": {
+    "GOOGLE_VISION_API_KEY": "@google_vision_api_key",
+    "GOOGLE_GEMINI_API_KEY": "@google_gemini_api_key",
+    "DATABASE_URL": "@database_url",
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_KEY": "@supabase_key",
+    "CORS_ORIGINS": "@cors_origins",
+    "SECRET_KEY": "@secret_key"
+  }
+}

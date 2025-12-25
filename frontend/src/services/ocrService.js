@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '../config/api';
 
-const API_URL = 'http://localhost:5000/api';
+// API_URL is now imported from centralized config
 
 export const uploadFile = async (file) => {
   const formData = new FormData();

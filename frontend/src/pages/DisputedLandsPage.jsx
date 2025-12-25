@@ -106,7 +106,8 @@ const DisputedLandsPage = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/disputed-lands/stats');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/disputed-lands/stats`);
       if (response.ok) {
         const data = await response.json();
         setStats(data);
@@ -118,7 +119,8 @@ const DisputedLandsPage = () => {
 
   const fetchDistricts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/disputed-lands/districts');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/disputed-lands/districts`);
       if (response.ok) {
         const data = await response.json();
         setDistricts(data.districts || []);
@@ -134,7 +136,8 @@ const DisputedLandsPage = () => {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:5000/api/disputed-lands/tehsils?district=${encodeURIComponent(district)}`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/disputed-lands/tehsils?district=${encodeURIComponent(district)}`);
       if (response.ok) {
         const data = await response.json();
         setTehsils(data.tehsils || []);
@@ -154,7 +157,8 @@ const DisputedLandsPage = () => {
         ...Object.fromEntries(Object.entries(filters).filter(([_, v]) => v !== ''))
       });
 
-      const response = await fetch(`http://localhost:5000/api/disputed-lands?${params}`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/disputed-lands?${params}`);
       if (response.ok) {
         const data = await response.json();
         setDisputedLands(data.lands || []);
@@ -183,7 +187,8 @@ const DisputedLandsPage = () => {
 
   const handleLandClick = async (landId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/disputed-lands/${landId}`);
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/disputed-lands/${landId}`);
       if (response.ok) {
         const data = await response.json();
         setSelectedLand(data);
