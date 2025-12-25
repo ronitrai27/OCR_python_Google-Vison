@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Languages, Upload, ArrowRight, FileText, CheckCircle, Loader2, Download } from 'lucide-react';
@@ -31,7 +32,8 @@ const TranslationFeaturePage = () => {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/translate', formData, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const response = await axios.post(`${apiUrl}/api/translate`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setResult(response.data);
@@ -219,7 +221,7 @@ const TranslationFeaturePage = () => {
               <div className="w-16 h-16 rounded-full bg-[#292929] mx-auto mb-4 flex items-center justify-center">
                 <Languages className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-2">10+ Languages</h3>
+              <h3 className="text-xl font-bold mb-2">Multiple Languages</h3>
               <p className="text-[#292929]">
                 Support for Urdu, Hindi, and major Indian regional languages
               </p>

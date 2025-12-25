@@ -67,7 +67,7 @@ const DatabaseFeaturePage = () => {
   ];
 
   const stats = [
-    { value: '50K+', label: 'Records Stored', icon: FileText },
+    { value: 'Unlimited', label: 'Storage Capacity', icon: FileText },
     { value: '99.9%', label: 'Uptime', icon: Server },
     { value: '<100ms', label: 'Query Speed', icon: Zap },
     { value: '256-bit', label: 'Encryption', icon: Lock }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
 
 const tourSteps = [
@@ -14,7 +14,7 @@ const tourSteps = [
   {
     id: 2,
     title: 'POWERFUL OCR EXTRACTION',
-    description: 'Upload your legacy Urdu and Hindi documents. Our AI-powered OCR extracts text with 95%+ accuracy in seconds.',
+    description: 'Upload your legacy Urdu and Hindi documents. Our AI-powered OCR extracts text accurately in seconds.',
     target: 'features-section',
     position: 'bottom',
     icon: '📄',
@@ -64,14 +64,21 @@ const GuidedTour = ({ isOpen, onClose, onComplete }) => {
     if (step.target) {
       const element = document.querySelector(`[data-tour="${step.target}"]`);
       if (element) {
-        const rect = element.getBoundingClientRect();
-        setTargetRect(rect);
+        // Use requestAnimationFrame to defer setState and avoid synchronous calls
+        requestAnimationFrame(() => {
+          const rect = element.getBoundingClientRect();
+          setTargetRect(rect);
+        });
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
-        setTargetRect(null);
+        requestAnimationFrame(() => {
+          setTargetRect(null);
+        });
       }
     } else {
-      setTargetRect(null);
+      requestAnimationFrame(() => {
+        setTargetRect(null);
+      });
     }
   }, [currentStep, isOpen]);
 

@@ -171,6 +171,7 @@ const Navbar = ({ showBackButton = false }: NavbarProps) => {
                 )}
               </AnimatePresence>
             </div>
+            <AnimatedNavLink to="/disputed-lands">Disputed Lands</AnimatedNavLink>
             <AnimatedNavLink to="/about">About</AnimatedNavLink>
             <AnimatedNavLink to="/contact">Contact</AnimatedNavLink>
             
@@ -254,6 +255,7 @@ const Navbar = ({ showBackButton = false }: NavbarProps) => {
                   { to: '/features/ocr', label: 'OCR Extraction' },
                   { to: '/features/translation', label: 'Translation' },
                   { to: '/features/database', label: 'Database Storage' },
+                  { to: '/disputed-lands', label: 'Disputed Lands' },
                   { to: '/about', label: 'About' },
                   { to: '/contact', label: 'Contact' },
                 ].map((item, index) => (

@@ -132,7 +132,7 @@ const LandingPage = () => {
   const features = [
     {
       title: "Advanced OCR",
-      description: "Extract text from scanned Urdu/Hindi documents with 95%+ accuracy using Google Vision API.",
+      description: "Extract text from scanned Urdu/Hindi documents using advanced Google Vision API technology.",
       header: <OCRAnimation />,
       icon: <ScanText className="h-4 w-4 text-blue-500" />,
     },
@@ -196,10 +196,10 @@ const LandingPage = () => {
   ];
 
   const stats = [
-    { value: "95%", label: "OCR Accuracy" },
-    { value: "10+", label: "Languages Supported" },
-    { value: "50K+", label: "Documents Processed" },
-    { value: "99.9%", label: "Uptime" },
+    { value: "AI-Powered", label: "Google Vision OCR" },
+    { value: "Multi-Language", label: "Urdu, Hindi, English" },
+    { value: "Real-Time", label: "Instant Processing" },
+    { value: "Secure", label: "Cloud Storage" },
   ];
 
   return (

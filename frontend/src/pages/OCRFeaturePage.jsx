@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ScanText, CheckCircle, Zap, Shield, ArrowRight, BookOpen } from 'lucide-react';
@@ -42,9 +43,9 @@ const OCRFeaturePage = () => {
               className="bg-white rounded-2xl p-8 shadow-lg"
             >
               <CheckCircle className="w-12 h-12 text-[#292929] mb-4" />
-              <h3 className="text-2xl font-bold mb-4">95%+ Accuracy</h3>
+              <h3 className="text-2xl font-bold mb-4">High Accuracy</h3>
               <p className="text-[#292929]">
-                Our OCR engine achieves over 95% accuracy on complex Urdu and Hindi scripts, even with handwritten documents and poor scan quality.
+                Our Google Vision API-powered OCR engine delivers precise text extraction on complex Urdu and Hindi scripts, handling both handwritten documents and various scan qualities.
               </p>
             </motion.div>
 

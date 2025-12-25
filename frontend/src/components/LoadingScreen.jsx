@@ -1,6 +1,16 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { BookOpen } from 'lucide-react';
+
+// Generate random values outside component to make them truly static
+const lineWidths = Array.from({ length: 8 }, () => 60 + Math.random() * 40);
+const particles = Array.from({ length: 20 }, () => ({
+  left: Math.random() * 100,
+  top: Math.random() * 100,
+  duration: 3 + Math.random() * 2,
+  delay: Math.random() * 2,
+}));
 
 const LoadingScreen = () => {
   return (
@@ -41,7 +51,7 @@ const LoadingScreen = () => {
             }}
           >
             <div className="text-amber-100 space-y-2 px-8">
-              {[...Array(8)].map((_, i) => (
+              {lineWidths.map((width, i) => (
                 <motion.div
                   key={i}
                   initial={{ scaleX: 0 }}
@@ -54,7 +64,7 @@ const LoadingScreen = () => {
                   }}
                   className="h-1.5 bg-amber-200/30 rounded"
                   style={{ 
-                    width: `${60 + Math.random() * 40}%`,
+                    width: `${width}%`,
                     transformOrigin: 'left',
                   }}
                 />
@@ -105,22 +115,22 @@ const LoadingScreen = () => {
 
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {particles.map((particle, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-amber-400/30 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${particle.left}%`,
+              top: `${particle.top}%`,
             }}
             animate={{
               y: [0, -30, 0],
               opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: particle.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: particle.delay,
             }}
           />
         ))}

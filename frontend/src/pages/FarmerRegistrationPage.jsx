@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import showToast from '../utils/toast';
 import { 
@@ -14,8 +15,245 @@ import {
   ArrowRight,
   Tractor,
   Wheat,
-  Home
+  Home,
+  Globe
 } from 'lucide-react';
+
+// Translations for English and Urdu
+const translations = {
+  en: {
+    // Header
+    farmerRegistration: 'Farmer Registration',
+    completeProfile: 'Complete your profile for AgriStack services',
+    
+    // Steps
+    personalDetails: 'Personal Details',
+    address: 'Address',
+    landDetails: 'Land Details',
+    documents: 'Documents',
+    
+    // Personal Details
+    fullName: 'Full Name (as per Aadhaar)',
+    enterFullName: 'Enter your full name',
+    fatherName: "Father's Name",
+    enterFatherName: "Enter father's name",
+    dateOfBirth: 'Date of Birth',
+    gender: 'Gender',
+    selectGender: 'Select Gender',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
+    mobileNumber: 'Mobile Number',
+    mobileDigits: '10-digit mobile number',
+    alternateMobile: 'Alternate Mobile Number',
+    
+    // Address Details
+    addressDetails: 'Address Details',
+    state: 'State',
+    selectState: 'Select State',
+    district: 'District',
+    selectDistrict: 'Select District',
+    blockTehsil: 'Block/Tehsil',
+    enterBlock: 'Enter block/tehsil',
+    village: 'Village',
+    enterVillage: 'Enter village name',
+    pincode: 'Pincode',
+    pincodeDigits: '6-digit pincode',
+    fullAddress: 'Full Address',
+    enterFullAddress: 'Enter complete address',
+    
+    // Land Details
+    landAgricultural: 'Land & Agricultural Details',
+    totalLandArea: 'Total Land Area',
+    enterArea: 'Enter area',
+    acres: 'Acres',
+    hectares: 'Hectares',
+    bigha: 'Bigha',
+    kanal: 'Kanal',
+    marla: 'Marla',
+    irrigationType: 'Irrigation Type',
+    selectType: 'Select Type',
+    rainfed: 'Rainfed',
+    canal: 'Canal',
+    tubewell: 'Tubewell',
+    well: 'Well',
+    dripIrrigation: 'Drip Irrigation',
+    sprinkler: 'Sprinkler',
+    mixed: 'Mixed',
+    soilType: 'Soil Type',
+    selectSoilType: 'Select Soil Type',
+    alluvial: 'Alluvial',
+    black: 'Black (Regur)',
+    redSoil: 'Red Soil',
+    laterite: 'Laterite',
+    sandy: 'Sandy',
+    clay: 'Clay',
+    loamy: 'Loamy',
+    primaryCrop: 'Primary Crop',
+    primaryCropPlaceholder: 'e.g., Wheat, Rice, Saffron',
+    secondaryCrops: 'Secondary Crops',
+    secondaryCropsPlaceholder: 'e.g., Pulses, Vegetables, Fruits (comma separated)',
+    
+    // Documents
+    identityBank: 'Identity & Bank Details',
+    aadhaarNumber: 'Aadhaar Number',
+    aadhaarDigits: '12-digit Aadhaar number',
+    panNumber: 'PAN Number',
+    panPlaceholder: 'e.g., ABCDE1234F',
+    bankAccountNumber: 'Bank Account Number',
+    enterAccountNumber: 'Enter account number',
+    ifscCode: 'IFSC Code',
+    ifscPlaceholder: 'e.g., SBIN0001234',
+    bankName: 'Bank Name',
+    enterBankName: 'Enter bank name',
+    kisanId: 'Kisan ID (if available)',
+    enterKisanId: 'Enter Kisan ID',
+    soilHealthCard: 'Soil Health Card Number',
+    enterCardNumber: 'Enter card number',
+    pmKisanBeneficiary: 'I am a PM-KISAN beneficiary',
+    
+    // Navigation
+    previous: 'Previous',
+    next: 'Next',
+    saving: 'Saving...',
+    completeRegistration: 'Complete Registration',
+    skipForNow: 'Skip for now and complete later',
+    
+    // Language
+    language: 'Language',
+    english: 'English',
+    urdu: 'اردو'
+  },
+  ur: {
+    // Header
+    farmerRegistration: 'کسان رجسٹریشن',
+    completeProfile: 'ایگری اسٹیک خدمات کے لیے اپنا پروفائل مکمل کریں',
+    
+    // Steps
+    personalDetails: 'ذاتی تفصیلات',
+    address: 'پتہ',
+    landDetails: 'زمین کی تفصیلات',
+    documents: 'دستاویزات',
+    
+    // Personal Details
+    fullName: 'پورا نام (آدھار کے مطابق)',
+    enterFullName: 'اپنا پورا نام درج کریں',
+    fatherName: 'والد کا نام',
+    enterFatherName: 'والد کا نام درج کریں',
+    dateOfBirth: 'تاریخ پیدائش',
+    gender: 'جنس',
+    selectGender: 'جنس منتخب کریں',
+    male: 'مرد',
+    female: 'عورت',
+    other: 'دیگر',
+    mobileNumber: 'موبائل نمبر',
+    mobileDigits: '10 ہندسوں کا موبائل نمبر',
+    alternateMobile: 'متبادل موبائل نمبر',
+    
+    // Address Details
+    addressDetails: 'پتے کی تفصیلات',
+    state: 'ریاست',
+    selectState: 'ریاست منتخب کریں',
+    district: 'ضلع',
+    selectDistrict: 'ضلع منتخب کریں',
+    blockTehsil: 'بلاک/تحصیل',
+    enterBlock: 'بلاک/تحصیل درج کریں',
+    village: 'گاؤں',
+    enterVillage: 'گاؤں کا نام درج کریں',
+    pincode: 'پن کوڈ',
+    pincodeDigits: '6 ہندسوں کا پن کوڈ',
+    fullAddress: 'مکمل پتہ',
+    enterFullAddress: 'مکمل پتہ درج کریں',
+    
+    // Land Details
+    landAgricultural: 'زمین اور زرعی تفصیلات',
+    totalLandArea: 'کل زمین کا رقبہ',
+    enterArea: 'رقبہ درج کریں',
+    acres: 'ایکڑ',
+    hectares: 'ہیکٹر',
+    bigha: 'بیگھہ',
+    kanal: 'کنال',
+    marla: 'مرلہ',
+    irrigationType: 'آبپاشی کی قسم',
+    selectType: 'قسم منتخب کریں',
+    rainfed: 'بارانی',
+    canal: 'نہر',
+    tubewell: 'ٹیوب ویل',
+    well: 'کنواں',
+    dripIrrigation: 'قطرہ آبپاشی',
+    sprinkler: 'اسپرنکلر',
+    mixed: 'مخلوط',
+    soilType: 'مٹی کی قسم',
+    selectSoilType: 'مٹی کی قسم منتخب کریں',
+    alluvial: 'نقطی',
+    black: 'کالی مٹی',
+    redSoil: 'سرخ مٹی',
+    laterite: 'لیٹرائٹ',
+    sandy: 'ریتلی',
+    clay: 'چکنی مٹی',
+    loamy: 'دومٹ',
+    primaryCrop: 'بنیادی فصل',
+    primaryCropPlaceholder: 'مثلاً گندم، چاول، زعفران',
+    secondaryCrops: 'ثانوی فصلیں',
+    secondaryCropsPlaceholder: 'مثلاً دالیں، سبزیاں، پھل (کوما سے الگ کریں)',
+    
+    // Documents
+    identityBank: 'شناخت اور بینک کی تفصیلات',
+    aadhaarNumber: 'آدھار نمبر',
+    aadhaarDigits: '12 ہندسوں کا آدھار نمبر',
+    panNumber: 'پین نمبر',
+    panPlaceholder: 'مثلاً ABCDE1234F',
+    bankAccountNumber: 'بینک اکاؤنٹ نمبر',
+    enterAccountNumber: 'اکاؤنٹ نمبر درج کریں',
+    ifscCode: 'آئی ایف ایس سی کوڈ',
+    ifscPlaceholder: 'مثلاً SBIN0001234',
+    bankName: 'بینک کا نام',
+    enterBankName: 'بینک کا نام درج کریں',
+    kisanId: 'کسان آئی ڈی (اگر دستیاب ہو)',
+    enterKisanId: 'کسان آئی ڈی درج کریں',
+    soilHealthCard: 'مٹی صحت کارڈ نمبر',
+    enterCardNumber: 'کارڈ نمبر درج کریں',
+    pmKisanBeneficiary: 'میں پی ایم کسان کا مستفید ہوں',
+    
+    // Navigation
+    previous: 'پچھلا',
+    next: 'اگلا',
+    saving: 'محفوظ ہو رہا ہے...',
+    completeRegistration: 'رجسٹریشن مکمل کریں',
+    skipForNow: 'ابھی چھوڑیں اور بعد میں مکمل کریں',
+    
+    // Language
+    language: 'زبان',
+    english: 'English',
+    urdu: 'اردو'
+  }
+};
+
+// All districts of Jammu & Kashmir (Union Territory)
+const jkDistricts = [
+  // Jammu Division
+  { name: 'Jammu', nameUrdu: 'جموں' },
+  { name: 'Samba', nameUrdu: 'سامبہ' },
+  { name: 'Kathua', nameUrdu: 'کٹھوعہ' },
+  { name: 'Udhampur', nameUrdu: 'اودھم پور' },
+  { name: 'Reasi', nameUrdu: 'ریاسی' },
+  { name: 'Rajouri', nameUrdu: 'راجوری' },
+  { name: 'Poonch', nameUrdu: 'پونچھ' },
+  { name: 'Doda', nameUrdu: 'ڈوڈہ' },
+  { name: 'Kishtwar', nameUrdu: 'کشتواڑ' },
+  { name: 'Ramban', nameUrdu: 'رامبن' },
+  // Kashmir Division
+  { name: 'Srinagar', nameUrdu: 'سرینگر' },
+  { name: 'Budgam', nameUrdu: 'بڈگام' },
+  { name: 'Anantnag', nameUrdu: 'اننت ناگ' },
+  { name: 'Pulwama', nameUrdu: 'پلوامہ' },
+  { name: 'Shopian', nameUrdu: 'شوپیاں' },
+  { name: 'Kulgam', nameUrdu: 'کلگام' },
+  { name: 'Baramulla', nameUrdu: 'بارہمولہ' },
+  { name: 'Bandipora', nameUrdu: 'بانڈی پورہ' },
+  { name: 'Kupwara', nameUrdu: 'کپواڑہ' },
+  { name: 'Ganderbal', nameUrdu: 'گاندربل' },
+];
 
 const FarmerRegistrationPage = () => {
   const navigate = useNavigate();
@@ -23,6 +261,10 @@ const FarmerRegistrationPage = () => {
   const [error, setError] = useState(null);
   const [currentStep, setCurrentStep] = useState(1);
   const [user, setUser] = useState(null);
+  const [language, setLanguage] = useState('en'); // 'en' for English, 'ur' for Urdu
+  
+  // Get current translations
+  const t = translations[language];
   
   const [formData, setFormData] = useState({
     // Personal Details
@@ -34,7 +276,7 @@ const FarmerRegistrationPage = () => {
     alternatePhone: '',
     
     // Address Details
-    state: '',
+    state: 'Jammu & Kashmir',
     district: '',
     block: '',
     village: '',
@@ -43,7 +285,7 @@ const FarmerRegistrationPage = () => {
     
     // Land Details
     totalLandArea: '',
-    landUnit: 'acres',
+    landUnit: 'kanal',
     irrigationType: '',
     soilType: '',
     primaryCrop: '',
@@ -93,32 +335,38 @@ const FarmerRegistrationPage = () => {
     setError(null);
 
     try {
-      // Save farmer profile to Supabase
-      const { error: profileError } = await supabase
-        .from('farmer_profiles')
-        .upsert({
-          user_id: user.id,
-          ...formData,
-          profile_completed: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        });
-
-      if (profileError) {
-        // If table doesn't exist, save to user metadata instead
-        const { error: metaError } = await supabase.auth.updateUser({
-          data: {
-            farmer_profile: formData,
+      // First, always save to user metadata for profile completion tracking
+      const { error: metaError } = await supabase.auth.updateUser({
+        data: {
+          farmer_profile: {
+            ...formData,
             profile_completed: true,
+            updated_at: new Date().toISOString(),
           }
-        });
+        }
+      });
 
-        if (metaError) throw metaError;
+      if (metaError) throw metaError;
+
+      // Optionally try to save to farmer_profiles table if it exists
+      try {
+        await supabase
+          .from('farmer_profiles')
+          .upsert({
+            user_id: user.id,
+            ...formData,
+            profile_completed: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+      } catch (tableError) {
+        // Table might not exist, that's ok - we have user metadata
+        console.log('farmer_profiles table not available, using metadata');
       }
 
-      // Show success toast and redirect to home page
+      // Show success toast and redirect to dashboard
       showToast.success('Registration completed! Welcome to AgriStack 🌾');
-      navigate('/');
+      navigate('/dashboard');
     } catch (error) {
       console.error('Profile save failed:', error);
       setError(error.message || 'Failed to save profile. Please try again.');
@@ -131,34 +379,40 @@ const FarmerRegistrationPage = () => {
   const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 4));
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
+  const toggleLanguage = () => {
+    setLanguage(prev => prev === 'en' ? 'ur' : 'en');
+  };
+
   const steps = [
-    { number: 1, title: 'Personal Details', icon: User },
-    { number: 2, title: 'Address', icon: MapPin },
-    { number: 3, title: 'Land Details', icon: Wheat },
-    { number: 4, title: 'Documents', icon: FileText },
+    { number: 1, title: t.personalDetails, icon: User },
+    { number: 2, title: t.address, icon: MapPin },
+    { number: 3, title: t.landDetails, icon: Wheat },
+    { number: 4, title: t.documents, icon: FileText },
   ];
 
-  const indianStates = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
-    'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
-    'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
-    'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
-    'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
-  ];
-
-  const inputClass = "w-full px-4 py-3 rounded-xl border-2 border-neutral-200 bg-white focus:border-[#292929] outline-none transition-all text-[#292929]";
-  const labelClass = "block text-sm font-semibold text-[#292929] mb-2";
+  const inputClass = `w-full px-4 py-3 rounded-xl border-2 border-neutral-200 bg-white focus:border-[#292929] outline-none transition-all text-[#292929] ${language === 'ur' ? 'text-right' : 'text-left'}`;
+  const labelClass = `block text-sm font-semibold text-[#292929] mb-2 ${language === 'ur' ? 'text-right' : 'text-left'}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50">
+    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-amber-50 ${language === 'ur' ? 'rtl' : 'ltr'}`} dir={language === 'ur' ? 'rtl' : 'ltr'}>
       {/* Header */}
       <div className="bg-[#292929] text-white py-6 px-4">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-2">
-            <Tractor className="w-8 h-8" />
-            <h1 className="text-2xl font-bold">Farmer Registration</h1>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-3">
+              <Tractor className="w-8 h-8" />
+              <h1 className="text-2xl font-bold">{t.farmerRegistration}</h1>
+            </div>
+            {/* Language Toggle */}
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+            >
+              <Globe className="w-5 h-5" />
+              <span className="font-medium">{language === 'en' ? 'اردو' : 'English'}</span>
+            </button>
           </div>
-          <p className="text-neutral-300">Complete your profile for AgriStack services</p>
+          <p className="text-neutral-300">{t.completeProfile}</p>
         </div>
       </div>
 
@@ -219,14 +473,14 @@ const FarmerRegistrationPage = () => {
             {/* Step 1: Personal Details */}
             {currentStep === 1 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold text-[#292929] mb-6 flex items-center gap-2">
+                <h2 className={`text-xl font-bold text-[#292929] mb-6 flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                   <User className="w-5 h-5" />
-                  Personal Details
+                  {t.personalDetails}
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className={labelClass}>Full Name (as per Aadhaar) *</label>
+                    <label className={labelClass}>{t.fullName} *</label>
                     <input
                       type="text"
                       name="fullName"
@@ -234,11 +488,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter your full name"
+                      placeholder={t.enterFullName}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Father's Name *</label>
+                    <label className={labelClass}>{t.fatherName} *</label>
                     <input
                       type="text"
                       name="fatherName"
@@ -246,11 +500,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter father's name"
+                      placeholder={t.enterFatherName}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Date of Birth *</label>
+                    <label className={labelClass}>{t.dateOfBirth} *</label>
                     <input
                       type="date"
                       name="dateOfBirth"
@@ -261,7 +515,7 @@ const FarmerRegistrationPage = () => {
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Gender *</label>
+                    <label className={labelClass}>{t.gender} *</label>
                     <select
                       name="gender"
                       value={formData.gender}
@@ -269,14 +523,14 @@ const FarmerRegistrationPage = () => {
                       required
                       className={inputClass}
                     >
-                      <option value="">Select Gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="">{t.selectGender}</option>
+                      <option value="male">{t.male}</option>
+                      <option value="female">{t.female}</option>
+                      <option value="other">{t.other}</option>
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Mobile Number *</label>
+                    <label className={labelClass}>{t.mobileNumber} *</label>
                     <input
                       type="tel"
                       name="phone"
@@ -285,11 +539,11 @@ const FarmerRegistrationPage = () => {
                       required
                       pattern="[0-9]{10}"
                       className={inputClass}
-                      placeholder="10-digit mobile number"
+                      placeholder={t.mobileDigits}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Alternate Mobile Number</label>
+                    <label className={labelClass}>{t.alternateMobile}</label>
                     <input
                       type="tel"
                       name="alternatePhone"
@@ -297,7 +551,7 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       pattern="[0-9]{10}"
                       className={inputClass}
-                      placeholder="10-digit mobile number"
+                      placeholder={t.mobileDigits}
                     />
                   </div>
                 </div>
@@ -307,41 +561,44 @@ const FarmerRegistrationPage = () => {
             {/* Step 2: Address Details */}
             {currentStep === 2 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold text-[#292929] mb-6 flex items-center gap-2">
+                <h2 className={`text-xl font-bold text-[#292929] mb-6 flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                   <MapPin className="w-5 h-5" />
-                  Address Details
+                  {t.addressDetails}
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className={labelClass}>State *</label>
+                    <label className={labelClass}>{t.state} *</label>
                     <select
                       name="state"
                       value={formData.state}
                       onChange={handleChange}
                       required
                       className={inputClass}
+                      disabled
                     >
-                      <option value="">Select State</option>
-                      {indianStates.map(state => (
-                        <option key={state} value={state}>{state}</option>
-                      ))}
+                      <option value="Jammu & Kashmir">{language === 'ur' ? 'جموں و کشمیر' : 'Jammu & Kashmir'}</option>
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>District *</label>
-                    <input
-                      type="text"
+                    <label className={labelClass}>{t.district} *</label>
+                    <select
                       name="district"
                       value={formData.district}
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter district"
-                    />
+                    >
+                      <option value="">{t.selectDistrict}</option>
+                      {jkDistricts.map(district => (
+                        <option key={district.name} value={district.name}>
+                          {language === 'ur' ? district.nameUrdu : district.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Block/Tehsil *</label>
+                    <label className={labelClass}>{t.blockTehsil} *</label>
                     <input
                       type="text"
                       name="block"
@@ -349,11 +606,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter block/tehsil"
+                      placeholder={t.enterBlock}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Village *</label>
+                    <label className={labelClass}>{t.village} *</label>
                     <input
                       type="text"
                       name="village"
@@ -361,11 +618,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter village name"
+                      placeholder={t.enterVillage}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Pincode *</label>
+                    <label className={labelClass}>{t.pincode} *</label>
                     <input
                       type="text"
                       name="pincode"
@@ -374,11 +631,11 @@ const FarmerRegistrationPage = () => {
                       required
                       pattern="[0-9]{6}"
                       className={inputClass}
-                      placeholder="6-digit pincode"
+                      placeholder={t.pincodeDigits}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className={labelClass}>Full Address *</label>
+                    <label className={labelClass}>{t.fullAddress} *</label>
                     <textarea
                       name="fullAddress"
                       value={formData.fullAddress}
@@ -386,7 +643,7 @@ const FarmerRegistrationPage = () => {
                       required
                       rows={3}
                       className={inputClass}
-                      placeholder="Enter complete address"
+                      placeholder={t.enterFullAddress}
                     />
                   </div>
                 </div>
@@ -396,15 +653,15 @@ const FarmerRegistrationPage = () => {
             {/* Step 3: Land Details */}
             {currentStep === 3 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold text-[#292929] mb-6 flex items-center gap-2">
+                <h2 className={`text-xl font-bold text-[#292929] mb-6 flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                   <Wheat className="w-5 h-5" />
-                  Land & Agricultural Details
+                  {t.landAgricultural}
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className={labelClass}>Total Land Area *</label>
-                    <div className="flex gap-2">
+                    <label className={labelClass}>{t.totalLandArea} *</label>
+                    <div className={`flex gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                       <input
                         type="number"
                         name="totalLandArea"
@@ -413,7 +670,7 @@ const FarmerRegistrationPage = () => {
                         required
                         step="0.01"
                         className={`${inputClass} flex-1`}
-                        placeholder="Enter area"
+                        placeholder={t.enterArea}
                       />
                       <select
                         name="landUnit"
@@ -421,14 +678,16 @@ const FarmerRegistrationPage = () => {
                         onChange={handleChange}
                         className={`${inputClass} w-28`}
                       >
-                        <option value="acres">Acres</option>
-                        <option value="hectares">Hectares</option>
-                        <option value="bigha">Bigha</option>
+                        <option value="kanal">{t.kanal}</option>
+                        <option value="marla">{t.marla}</option>
+                        <option value="acres">{t.acres}</option>
+                        <option value="hectares">{t.hectares}</option>
+                        <option value="bigha">{t.bigha}</option>
                       </select>
                     </div>
                   </div>
                   <div>
-                    <label className={labelClass}>Irrigation Type *</label>
+                    <label className={labelClass}>{t.irrigationType} *</label>
                     <select
                       name="irrigationType"
                       value={formData.irrigationType}
@@ -436,36 +695,36 @@ const FarmerRegistrationPage = () => {
                       required
                       className={inputClass}
                     >
-                      <option value="">Select Type</option>
-                      <option value="rainfed">Rainfed</option>
-                      <option value="canal">Canal</option>
-                      <option value="tubewell">Tubewell</option>
-                      <option value="well">Well</option>
-                      <option value="drip">Drip Irrigation</option>
-                      <option value="sprinkler">Sprinkler</option>
-                      <option value="mixed">Mixed</option>
+                      <option value="">{t.selectType}</option>
+                      <option value="rainfed">{t.rainfed}</option>
+                      <option value="canal">{t.canal}</option>
+                      <option value="tubewell">{t.tubewell}</option>
+                      <option value="well">{t.well}</option>
+                      <option value="drip">{t.dripIrrigation}</option>
+                      <option value="sprinkler">{t.sprinkler}</option>
+                      <option value="mixed">{t.mixed}</option>
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Soil Type</label>
+                    <label className={labelClass}>{t.soilType}</label>
                     <select
                       name="soilType"
                       value={formData.soilType}
                       onChange={handleChange}
                       className={inputClass}
                     >
-                      <option value="">Select Soil Type</option>
-                      <option value="alluvial">Alluvial</option>
-                      <option value="black">Black (Regur)</option>
-                      <option value="red">Red Soil</option>
-                      <option value="laterite">Laterite</option>
-                      <option value="sandy">Sandy</option>
-                      <option value="clay">Clay</option>
-                      <option value="loamy">Loamy</option>
+                      <option value="">{t.selectSoilType}</option>
+                      <option value="alluvial">{t.alluvial}</option>
+                      <option value="black">{t.black}</option>
+                      <option value="red">{t.redSoil}</option>
+                      <option value="laterite">{t.laterite}</option>
+                      <option value="sandy">{t.sandy}</option>
+                      <option value="clay">{t.clay}</option>
+                      <option value="loamy">{t.loamy}</option>
                     </select>
                   </div>
                   <div>
-                    <label className={labelClass}>Primary Crop *</label>
+                    <label className={labelClass}>{t.primaryCrop} *</label>
                     <input
                       type="text"
                       name="primaryCrop"
@@ -473,18 +732,18 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="e.g., Wheat, Rice, Cotton"
+                      placeholder={t.primaryCropPlaceholder}
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className={labelClass}>Secondary Crops</label>
+                    <label className={labelClass}>{t.secondaryCrops}</label>
                     <input
                       type="text"
                       name="secondaryCrops"
                       value={formData.secondaryCrops}
                       onChange={handleChange}
                       className={inputClass}
-                      placeholder="e.g., Pulses, Vegetables, Fruits (comma separated)"
+                      placeholder={t.secondaryCropsPlaceholder}
                     />
                   </div>
                 </div>
@@ -494,14 +753,14 @@ const FarmerRegistrationPage = () => {
             {/* Step 4: Documents */}
             {currentStep === 4 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold text-[#292929] mb-6 flex items-center gap-2">
+                <h2 className={`text-xl font-bold text-[#292929] mb-6 flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                   <FileText className="w-5 h-5" />
-                  Identity & Bank Details
+                  {t.identityBank}
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className={labelClass}>Aadhaar Number *</label>
+                    <label className={labelClass}>{t.aadhaarNumber} *</label>
                     <input
                       type="text"
                       name="aadhaarNumber"
@@ -510,11 +769,11 @@ const FarmerRegistrationPage = () => {
                       required
                       pattern="[0-9]{12}"
                       className={inputClass}
-                      placeholder="12-digit Aadhaar number"
+                      placeholder={t.aadhaarDigits}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>PAN Number</label>
+                    <label className={labelClass}>{t.panNumber}</label>
                     <input
                       type="text"
                       name="panNumber"
@@ -522,11 +781,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
                       className={inputClass}
-                      placeholder="e.g., ABCDE1234F"
+                      placeholder={t.panPlaceholder}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Bank Account Number *</label>
+                    <label className={labelClass}>{t.bankAccountNumber} *</label>
                     <input
                       type="text"
                       name="bankAccountNumber"
@@ -534,11 +793,11 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter account number"
+                      placeholder={t.enterAccountNumber}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>IFSC Code *</label>
+                    <label className={labelClass}>{t.ifscCode} *</label>
                     <input
                       type="text"
                       name="ifscCode"
@@ -547,11 +806,11 @@ const FarmerRegistrationPage = () => {
                       required
                       pattern="^[A-Z]{4}0[A-Z0-9]{6}$"
                       className={inputClass}
-                      placeholder="e.g., SBIN0001234"
+                      placeholder={t.ifscPlaceholder}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Bank Name *</label>
+                    <label className={labelClass}>{t.bankName} *</label>
                     <input
                       type="text"
                       name="bankName"
@@ -559,32 +818,32 @@ const FarmerRegistrationPage = () => {
                       onChange={handleChange}
                       required
                       className={inputClass}
-                      placeholder="Enter bank name"
+                      placeholder={t.enterBankName}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Kisan ID (if available)</label>
+                    <label className={labelClass}>{t.kisanId}</label>
                     <input
                       type="text"
                       name="kisanId"
                       value={formData.kisanId}
                       onChange={handleChange}
                       className={inputClass}
-                      placeholder="Enter Kisan ID"
+                      placeholder={t.enterKisanId}
                     />
                   </div>
                   <div>
-                    <label className={labelClass}>Soil Health Card Number</label>
+                    <label className={labelClass}>{t.soilHealthCard}</label>
                     <input
                       type="text"
                       name="soilHealthCard"
                       value={formData.soilHealthCard}
                       onChange={handleChange}
                       className={inputClass}
-                      placeholder="Enter card number"
+                      placeholder={t.enterCardNumber}
                     />
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className={`flex items-center gap-3 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
                     <input
                       type="checkbox"
                       name="pmKisanBeneficiary"
@@ -593,7 +852,7 @@ const FarmerRegistrationPage = () => {
                       className="w-5 h-5 rounded border-neutral-300 text-[#292929] focus:ring-[#292929]"
                     />
                     <label className="text-sm text-[#292929]">
-                      I am a PM-KISAN beneficiary
+                      {t.pmKisanBeneficiary}
                     </label>
                   </div>
                 </div>
@@ -601,14 +860,14 @@ const FarmerRegistrationPage = () => {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8 pt-6 border-t border-neutral-200">
+            <div className={`flex justify-between mt-8 pt-6 border-t border-neutral-200 ${language === 'ur' ? 'flex-row-reverse' : ''}`}>
               {currentStep > 1 ? (
                 <button
                   type="button"
                   onClick={prevStep}
                   className="px-6 py-3 rounded-xl border-2 border-neutral-200 text-[#292929] font-semibold hover:bg-neutral-50 transition-all"
                 >
-                  Previous
+                  {t.previous}
                 </button>
               ) : (
                 <div />
@@ -618,26 +877,26 @@ const FarmerRegistrationPage = () => {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="px-6 py-3 rounded-xl bg-[#292929] text-white font-semibold hover:bg-[#1a1a1a] transition-all flex items-center gap-2"
+                  className={`px-6 py-3 rounded-xl bg-[#292929] text-white font-semibold hover:bg-[#1a1a1a] transition-all flex items-center gap-2 ${language === 'ur' ? 'flex-row-reverse' : ''}`}
                 >
-                  Next
-                  <ArrowRight className="w-4 h-4" />
+                  {t.next}
+                  <ArrowRight className={`w-4 h-4 ${language === 'ur' ? 'rotate-180' : ''}`} />
                 </button>
               ) : (
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all flex items-center gap-2 disabled:opacity-70"
+                  className={`px-8 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-all flex items-center gap-2 disabled:opacity-70 ${language === 'ur' ? 'flex-row-reverse' : ''}`}
                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Saving...
+                      {t.saving}
                     </>
                   ) : (
                     <>
                       <CheckCircle className="w-5 h-5" />
-                      Complete Registration
+                      {t.completeRegistration}
                     </>
                   )}
                 </button>
@@ -652,7 +911,7 @@ const FarmerRegistrationPage = () => {
             onClick={() => navigate('/')}
             className="text-neutral-500 hover:text-[#292929] text-sm underline"
           >
-            Skip for now and complete later
+            {t.skipForNow}
           </button>
         </div>
       </div>

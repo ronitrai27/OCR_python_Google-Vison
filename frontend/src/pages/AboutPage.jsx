@@ -1,4 +1,5 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Target, Eye, Users, Award, Heart, Zap } from 'lucide-react';
 import Footer from '../components/Footer';
@@ -136,10 +137,10 @@ const AboutPage = () => {
         </div>
       </section>
 
-      {/* Impact */}
+      {/* Our Commitment */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center">Our Impact</h2>
+          <h2 className="text-4xl font-bold mb-12 text-center">Our Commitment</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -147,8 +148,8 @@ const AboutPage = () => {
               viewport={{ once: true }}
               className="bg-[#292929] text-white rounded-2xl p-8 text-center"
             >
-              <div className="text-5xl font-bold mb-2">50K+</div>
-              <div className="text-lg">Documents Processed</div>
+              <div className="text-3xl font-bold mb-3">🎯 Accuracy</div>
+              <div className="text-lg">Advanced AI-powered OCR with Google Vision API for precise text extraction</div>
             </motion.div>
 
             <motion.div
@@ -158,8 +159,8 @@ const AboutPage = () => {
               transition={{ delay: 0.1 }}
               className="bg-[#292929] text-white rounded-2xl p-8 text-center"
             >
-              <div className="text-5xl font-bold mb-2">95%</div>
-              <div className="text-lg">Accuracy Rate</div>
+              <div className="text-3xl font-bold mb-3">🌐 Accessibility</div>
+              <div className="text-lg">Multi-language support making land records accessible to all farmers</div>
             </motion.div>
 
             <motion.div
@@ -169,8 +170,8 @@ const AboutPage = () => {
               transition={{ delay: 0.2 }}
               className="bg-[#292929] text-white rounded-2xl p-8 text-center"
             >
-              <div className="text-5xl font-bold mb-2">10+</div>
-              <div className="text-lg">Partner Organizations</div>
+              <div className="text-3xl font-bold mb-3">⚡ Innovation</div>
+              <div className="text-lg">Cutting-edge technology solving historical land dispute challenges</div>
             </motion.div>
           </div>
         </div>
