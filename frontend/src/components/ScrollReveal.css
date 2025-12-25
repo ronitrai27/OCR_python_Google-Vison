@@ -1,0 +1,22 @@
+.scroll-reveal-container {
+  margin: 20px 0;
+  width: 95%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  transform-style: preserve-3d;
+}
+
+.scroll-reveal-text {
+  font-size: clamp(1.5rem, 4.5vw, 3.5rem);
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: center;
+}
+
+.scroll-reveal-text .word {
+  display: inline-block;
+  margin-right: 0.25em;
+  will-change: opacity, filter, color;
+  transition: color 0.3s ease;
+}
