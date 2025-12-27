@@ -1,13 +1,22 @@
 {
-  "name": "frontend",
+  "name": "agristack-ocr-frontend",
+  "version": "1.0.0",
+  "description": "Modern React frontend for digitizing land records with OCR and AI translation",
+  "author": "AgriStack Team",
+  "license": "MIT",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
+    "type-check": "tsc --noEmit",
     "vercel-build": "vite build"
   },
   "dependencies": {

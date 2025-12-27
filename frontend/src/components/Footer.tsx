@@ -110,8 +110,7 @@ const Footer = () => {
           setTimeout(() => setSuccess(false), 5000);
         }
       } catch (fallbackErr) {
-        // Show success anyway for UX - email can be collected via logs
-        console.log('Newsletter signup (fallback):', email);
+        // Show success anyway for UX
         setSuccess(true);
         setEmail('');
         setTimeout(() => setSuccess(false), 5000);

@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
     // Server configuration for development
     server: {
       port: 5173,
+      host: true,
       proxy: {
         // Proxy API requests to backend in development
         '/api': {
@@ -30,15 +31,30 @@ export default defineConfig(({ mode }) => {
     // Build configuration for production
     build: {
       outDir: 'dist',
-      sourcemap: false,
+      sourcemap: mode === 'development',
+      minify: 'esbuild',
       rollupOptions: {
         output: {
           manualChunks: {
-            'react-vendor': ['react', 'react-dom'],
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            'animation-vendor': ['framer-motion', 'gsap'],
             'leaflet-vendor': ['leaflet', 'react-leaflet'],
+            'ui-vendor': ['react-hot-toast', 'lucide-react', 'react-icons'],
           }
         }
-      }
+      },
+      chunkSizeWarningLimit: 1000,
+    },
+    
+    // Optimize dependencies
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom'],
+    },
+    
+    // Remove console in production
+    esbuild: {
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
     }
   }
 })
+
